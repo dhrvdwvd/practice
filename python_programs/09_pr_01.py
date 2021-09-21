@@ -1,0 +1,6 @@
+a = input("a =  ")
+b = input("b =  ")
+print("Typecasting the above strings into an integer.")
+a = int(a)
+b = int(b)
+print("a + b = ", a+b)
