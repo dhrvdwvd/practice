@@ -59,8 +59,7 @@ bool Search(struct bstNode* root, int x)
 
 struct bstNode* Minimum(struct bstNode* root)
 {
-    if(root == NULL) return root;
-    else if((*root).left!=NULL)
+    if((*root).left!=NULL)
     {
         return Minimum((*root).left);
     }

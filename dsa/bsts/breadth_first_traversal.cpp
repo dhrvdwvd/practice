@@ -1,105 +1,141 @@
-#include <iostream>
-#include <stdlib.h>
+#include<iostream>
 
 using namespace std;
 
-struct bstNode
+struct BNode
 {
     int data;
-    struct bstNode* left;
-    struct bstNode* right;
+    struct BNode* left;
+    struct BNode* right;
 };
 
 struct Node
 {
-    struct bstNode* data;
+    struct BNode* addrss;
     struct Node* next;
 };
 
 struct Node* front;
 struct Node* rear;
 
-struct Node* newNode(struct bstNode* x)
+struct Node* getNewNode(struct BNode* x)
 {
-    struct Node* temp = (struct Node*) malloc(sizeof(struct Node));
-    (*temp).data = x;
+    struct Node* temp = (struct Node*)malloc(sizeof(struct Node));
+    (*temp).addrss = x;
     (*temp).next = NULL;
     return temp;
 }
 
-void Enqueue(struct bstNode* x)
+void Enqueue(struct BNode* x)
 {
-    if(x==NULL) return;
-    struct Node* temp = newNode(x);
-    if(front==NULL && rear==NULL)
+    if(front==NULL)
     {
-        front = temp;
+        front = getNewNode(x);
+        rear = front;
+        return;
+    }
+    else if(front == rear)
+    {
+        rear = getNewNode(x);
+        (*front).next = rear;
+        return;
+    }
+    else
+    {
+        struct Node* temp = getNewNode(x);
+        (*rear).next = temp;
         rear = temp;
         return;
     }
-    (*rear).next = temp;
-    rear = temp;
 }
 
-struct bstNode* Dequeue()
+void Front()
 {
-    if(front==NULL && rear==NULL)
+    printf("%d ",(*(*front).addrss).data);
+    return;
+}
+
+void Dequeue()
+{
+    if(front==NULL)
     {
-        printf("Queue is empty\n");
-        return NULL;
+        printf("Queue is empty.\n");
+        return;
     }
     else if(front==rear)
     {
-        struct bstNode* x = (*front).data;
         struct Node* temp = front;
         front = NULL;
         rear = NULL;
         free(temp);
-        return x;
-    }
-    struct Node* temp = front;
-    struct bstNode* x = (*temp).data;
-    front = (*front).next;
-    free(temp);
-    return x;
-}
-
-
-struct bstNode* newbstNode(int x)
-{
-    struct bstNode* temp = (struct bstNode*) malloc(sizeof(struct bstNode));
-    (*temp).data = x;
-    (*temp).left = NULL;
-    (*temp).right = NULL;
-}
-
-struct bstNode* Insert(struct bstNode* root, int x)
-{
-    if(root == NULL)
-    {
-        struct bstNode* temp = newbstNode(x);
-        root = temp;
-    }
-    else if((*root).data < x)
-    {
-        (*root).right = Insert((*root).right,x);
+        return;
     }
     else
     {
+        struct Node* temp = front;
+        front = (*temp).next;
+        free(temp);
+        return;
+    }
+}
+struct BNode* getNewBNode(int x)
+{
+    struct BNode* temp = (struct BNode*) malloc(sizeof(struct BNode));
+    (*temp).data = x;
+    (*temp).left = NULL; (*temp).right = NULL;
+    return temp;
+}
+
+struct BNode* Insert(struct BNode* root, int x)
+{
+    if(root == NULL)
+    {
+        root = getNewBNode(x);
+    }
+    else if((*root).data >= x)
+    {
         (*root).left = Insert((*root).left, x);
+    }
+    else
+    {
+        (*root).right = Insert((*root).right,x);
     }
     return root;
 }
 
-void breadth_first_traversal(struct bstNode* root)
+void BFT(struct BNode* root)
 {
-    Enqueue(root);
-    struct bstNode* temp = Dequeue();
-    Enqueue((*root).left);
-    Enqueue((*root).right);
-    
+    struct BNode* temp = root;
+    Enqueue(temp);
+    while(front!=NULL)
+    {
+        temp=(*front).addrss;
+        Front();
+        Dequeue();
+        if((*temp).left!=NULL)
+        {
+            Enqueue((*temp).left);
+        }
+        if((*temp).right!=NULL)
+        {
+            Enqueue((*temp).right);
+        }
+    }
 }
 int main()
 {
+    struct BNode* root = NULL;
+    front=NULL;
+    rear=NULL;
+    root = Insert(root, 15);
+    root = Insert(root, 10);
+    root = Insert(root, 20);
+    root = Insert(root, 25);
+    root = Insert(root, 8);
+    root = Insert(root, 12);
+    // root = Insert(root, 14);
+    // root = Insert(root, 15);
+    // root = Insert(root, 16);
+    BFT(root);
     return 0;
 }

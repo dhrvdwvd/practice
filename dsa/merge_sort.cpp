@@ -66,7 +66,7 @@ void merge_sort(int a[], int p, int r)
 }
 int main()
 {
-    int a[] = {3,41,52,26,38,57,9,49};
+    int a[] = {1,1,2,2,3,3,0,0};
     merge_sort(a, 0, 7);
     for(int i=0; i<=7; i++)
     {
